@@ -16,10 +16,13 @@ def about():
     """About page route"""
     return render_template('about.html')
 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     """Process the user's movie preference query and display recommendations"""
-    query_text = request.form.get('query', '')
+    if request.method == 'POST':
+        query_text = request.form.get('query', '')
+    else:
+        query_text = request.args.get('query', '')
     
     if not query_text:
         flash('Please enter your movie preferences or a brief description.', 'warning')

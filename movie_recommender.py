@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from models import Movie
 from app import db, app
+from sqlalchemy import text
 
 # Logger setup
 logger = logging.getLogger(__name__)
@@ -48,6 +49,51 @@ def init_recommender():
     
     tfidf_matrix = tfidf_vectorizer.fit_transform(plots)
     logger.info(f"TF-IDF model built with {tfidf_matrix.shape[0]} movies and {tfidf_matrix.shape[1]} features.")
+
+def reload_movie_data():
+    """Drop all existing movies and reload from CSV."""
+    try:
+        # Delete all existing movies
+        Movie.query.delete()
+        db.session.commit()
+        logger.info("All existing movies deleted from database")
+        
+        # Load fresh data from CSV
+        load_movies_from_csv()
+        
+        # Reinitialize the recommender
+        global tfidf_vectorizer, tfidf_matrix, movie_ids
+        tfidf_vectorizer = None
+        tfidf_matrix = None
+        movie_ids = None
+        
+        # Get all movies from the database
+        movies = Movie.query.all()
+        
+        if not movies:
+            logger.error("Failed to reload movies!")
+            return False
+        
+        # Extract plot summaries and movie IDs
+        plots = [movie.plot for movie in movies]
+        movie_ids = [movie.id for movie in movies]
+        
+        # Create and fit TF-IDF vectorizer
+        logger.info("Rebuilding TF-IDF model...")
+        tfidf_vectorizer = TfidfVectorizer(
+            min_df=2,
+            max_df=0.95,
+            max_features=8000,
+            stop_words='english'
+        )
+        
+        tfidf_matrix = tfidf_vectorizer.fit_transform(plots)
+        logger.info(f"TF-IDF model rebuilt with {tfidf_matrix.shape[0]} movies and {tfidf_matrix.shape[1]} features.")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error reloading movie data: {str(e)}")
+        return False
 
 def load_movies_from_csv():
     """Load movie data from the CSV file into the database."""

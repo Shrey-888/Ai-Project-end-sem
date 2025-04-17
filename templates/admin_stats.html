@@ -62,7 +62,12 @@
                 reloadBtn.disabled = true;
                 reloadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Reloading...';
                 
-                fetch('/admin/reload-movies')
+                fetch('/admin/reload-movies', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
                     .then(response => response.json())
                     .then(data => {
                         resultDiv.classList.remove('d-none');

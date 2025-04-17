@@ -53,7 +53,7 @@ def movie_details(movie_id):
     movie = Movie.query.get_or_404(movie_id)
     return render_template('movie_details.html', movie=movie)
 
-@app.route('/admin/reload-movies', methods=['GET'])
+@app.route('/admin/reload-movies', methods=['GET', 'POST'])
 def admin_reload_movies():
     """Admin route to reload all movie data"""
     try:

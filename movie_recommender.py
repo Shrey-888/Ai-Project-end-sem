@@ -183,11 +183,93 @@ def get_recommendations(query_text, num_recommendations=5):
             logger.error("Failed to initialize recommender!")
             return []
     
+    # Extract genre preferences from the query if they exist
+    genre_weight = 0.3  # How much to weight genre matches vs text similarity
+    genre_preferences = []
+    
+    # Common genres to look for in the query
+    common_genres = [
+        "Action", "Adventure", "Animation", "Biography", "Comedy", 
+        "Crime", "Documentary", "Drama", "Family", "Fantasy", 
+        "Horror", "History", "Music", "Musical", "Mystery", 
+        "Romance", "Sci-Fi", "Sport", "Thriller", "War", "Western"
+    ]
+    
+    query_lower = query_text.lower()
+    
+    # Check for explicit genre requests
+    for genre in common_genres:
+        if genre.lower() in query_lower:
+            genre_preferences.append(genre)
+    
+    # Also check for some common genre descriptions
+    genre_descriptions = {
+        "scary": "Horror",
+        "frightening": "Horror",
+        "terrifying": "Horror",
+        "spooky": "Horror",
+        "funny": "Comedy",
+        "hilarious": "Comedy",
+        "laugh": "Comedy",
+        "romantic": "Romance",
+        "love story": "Romance",
+        "space": "Sci-Fi",
+        "superhero": "Action",
+        "historical": "History",
+        "cartoon": "Animation",
+        "animated": "Animation",
+        "kid": "Family",
+        "children": "Family",
+        "detective": "Mystery",
+        "mystery": "Mystery",
+        "whodunit": "Mystery",
+        "thriller": "Thriller",
+        "suspense": "Thriller",
+        "exciting": "Action",
+        "violent": "Action",
+        "battle": "Action",
+        "war": "War",
+        "western": "Western",
+        "cowboy": "Western",
+        "documentary": "Documentary",
+        "musical": "Musical",
+        "singing": "Musical",
+        "sport": "Sport",
+        "emotional": "Drama",
+        "dramatic": "Drama",
+    }
+    
+    for desc, genre in genre_descriptions.items():
+        if desc in query_lower and genre not in genre_preferences:
+            genre_preferences.append(genre)
+    
+    logger.info(f"Detected genre preferences: {genre_preferences}")
+    
     # Transform the query text using the fitted vectorizer
     query_vector = tfidf_vectorizer.transform([query_text])
     
     # Calculate cosine similarity between the query and all movies
     cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
+    
+    # Adjust similarity based on genre preferences if any were detected
+    if genre_preferences:
+        # Get all movies
+        all_movies = Movie.query.all()
+        
+        # Create a dictionary to map movie_id to its index in the cosine_similarities array
+        id_to_position = {movie_id: i for i, movie_id in enumerate(movie_ids)}
+        
+        # Boost scores for movies that match the genre preferences
+        for movie in all_movies:
+            if movie.id in id_to_position:
+                movie_genres = movie.genre.split(", ")
+                # Check if any of the movie's genres match the preferences
+                matching_genres = [g for g in genre_preferences if g in movie_genres]
+                if matching_genres:
+                    # Boost the similarity score based on number of matching genres
+                    position = id_to_position[movie.id]
+                    boost = genre_weight * len(matching_genres) / len(genre_preferences)
+                    cosine_similarities[position] += boost
     
     # Get indices of top similar movies
     similar_movie_indices = cosine_similarities.argsort()[:-num_recommendations-1:-1]
@@ -197,6 +279,11 @@ def get_recommendations(query_text, num_recommendations=5):
     
     # Retrieve movie details from the database
     recommended_movies = Movie.query.filter(Movie.id.in_(recommended_movie_ids)).all()
+    
+    # Get similarity scores for logging and debugging
+    movie_scores = [(movie_id, cosine_similarities[i]) for i, movie_id in enumerate(movie_ids) if movie_id in recommended_movie_ids]
+    movie_scores.sort(key=lambda x: x[1], reverse=True)
+    logger.debug(f"Recommendation scores: {movie_scores}")
     
     # Sort the result in the same order as the recommendations
     id_to_index = {movie_id: index for index, movie_id in enumerate(recommended_movie_ids)}

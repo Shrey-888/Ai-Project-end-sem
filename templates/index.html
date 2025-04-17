@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Movie Recommender - Find Your Next Favorite Movie{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-dark text-light">
+    <div class="container">
+        <h1 class="display-4">Find Your Perfect Movie Match</h1>
+        <p class="lead">
+            Our advanced NLP system analyzes movie plot summaries to recommend films that match your preferences.
+        </p>
+        <hr class="my-4">
+        <p>
+            Tell us what kind of movie you're in the mood for, or describe a film you enjoyed in the past.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title mb-4">Describe Your Ideal Movie</h3>
+                
+                <form id="search-form" action="{{ url_for('search') }}" method="post">
+                    <div class="mb-3">
+                        <label for="query-input" class="form-label">Your Movie Preferences:</label>
+                        <textarea id="query-input" name="query" class="form-control search-input" 
+                                  placeholder="E.g., 'A science fiction movie with time travel and unexpected plot twists'"
+                                  rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Find Movies
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="mt-4">
+                    <h6>Need some inspiration? Try one of these examples:</h6>
+                    <div id="example-suggestions" class="mt-2">
+                        <!-- Example suggestions will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="card-title mb-3">How It Works</h3>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-comment-alt fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="text-center">Describe</h5>
+                        <p class="text-center">Tell us what kind of movie you're looking for or what themes interest you.</p>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-brain fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="text-center">Analyze</h5>
+                        <p class="text-center">Our NLP engine analyzes your preferences and matches them with movie plots.</p>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-film fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="text-center">Discover</h5>
+                        <p class="text-center">Get personalized movie recommendations based on content, not just ratings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

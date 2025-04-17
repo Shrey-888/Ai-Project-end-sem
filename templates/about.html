@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Movie Recommender{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <h1 class="mb-4">About the Movie Recommendation System</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Project Overview</h3>
+                <p>
+                    The Movie Recommendation System uses Natural Language Processing (NLP) techniques to analyze 
+                    movie plot summaries and recommend films based on textual similarity. Unlike traditional 
+                    recommendation systems that rely on ratings or watch history, our approach focuses on the 
+                    actual content of movies to provide more relevant and personalized suggestions.
+                </p>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">How It Works</h3>
+                <p>
+                    Our system employs the following process to generate recommendations:
+                </p>
+                
+                <ol class="list-group list-group-numbered mb-4">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Text Processing</div>
+                            We process movie plot summaries by removing stop words, tokenizing, and vectorizing the text.
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">TF-IDF Vectorization</div>
+                            We use Term Frequency-Inverse Document Frequency (TF-IDF) to convert text into numerical vectors.
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Similarity Calculation</div>
+                            When you input your preferences, we calculate the cosine similarity between your input and all movie plots.
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Ranking</div>
+                            Movies are ranked by similarity score, and the top matches are presented as recommendations.
+                        </div>
+                    </li>
+                </ol>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Did you know?</strong> Cosine similarity measures the cosine of the angle between two vectors, 
+                    providing a similarity score between -1 and 1, where 1 represents perfect similarity.
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Technical Details</h3>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Frontend Technologies</h5>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item">HTML5/CSS3</li>
+                            <li class="list-group-item">Bootstrap 5</li>
+                            <li class="list-group-item">JavaScript</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Backend Technologies</h5>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item">Python Flask</li>
+                            <li class="list-group-item">scikit-learn (for TF-IDF)</li>
+                            <li class="list-group-item">SQLAlchemy (for database)</li>
+                            <li class="list-group-item">NLTK (for text processing)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Project Team</h3>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-circle fa-4x mb-3 text-primary"></i>
+                                <h5 class="card-title">Jiya Dudani</h5>
+                                <p class="card-text text-muted">KU2407U400</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-circle fa-4x mb-3 text-primary"></i>
+                                <h5 class="card-title">Shrey Patel</h5>
+                                <p class="card-text text-muted">KU2407U431</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-circle fa-4x mb-3 text-primary"></i>
+                                <h5 class="card-title">Krishna Lathiya</h5>
+                                <p class="card-text text-muted">KU2407U421</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

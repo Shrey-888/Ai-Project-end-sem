@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Movie Recommendations{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Your Movie Recommendations</h2>
+        
+        <div class="query-box mb-4">
+            <h5>Based on your description:</h5>
+            <p class="fst-italic">"{{ query }}"</p>
+            <a href="{{ url_for('index') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-redo me-1"></i>Try Another Search
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for movie in recommendations %}
+    <div class="col">
+        <div class="card h-100 movie-card">
+            <div class="card-body">
+                <h5 class="card-title movie-title">{{ movie.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted movie-year">{{ movie.year }} | {{ movie.genre }}</h6>
+                
+                <!-- Recommendation Score -->
+                <div class="recommendation-score">
+                    {{ loop.index }}
+                </div>
+                
+                <p class="card-text movie-plot">{{ movie.plot }}</p>
+                
+                <!-- Similarity Visual Indicator -->
+                <div class="progress mt-3" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" 
+                         style="width: {{ (1 - (loop.index0 * 0.15)) * 100 }}%;" 
+                         aria-valuenow="{{ (1 - (loop.index0 * 0.15)) * 100 }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-1">
+                    <small class="text-muted">Match Strength</small>
+                    <small class="text-muted">{{ ((1 - (loop.index0 * 0.15)) * 100) | int }}%</small>
+                </div>
+            </div>
+            
+            <div class="card-footer">
+                <small class="text-muted">
+                    <i class="fas fa-tag me-1"></i>{{ movie.genre }}
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="text-center mt-5">
+    <a href="{{ url_for('index') }}" class="btn btn-primary">
+        <i class="fas fa-search me-2"></i>Start a New Search
+    </a>
+</div>
+{% endblock %}

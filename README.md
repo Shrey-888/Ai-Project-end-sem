@@ -100,7 +100,8 @@ movie-recommendation-system/
 
 ## Screenshots
 
-<!-- Add screenshots of your application here -->
+![Screenshot 2025-04-22 185207](https://github.com/user-attachments/assets/a10b3512-d35f-41ab-87a8-7ccb9328f935)
+![Screenshot 2025-04-22 185236](https://github.com/user-attachments/assets/c7e988d6-d290-4993-b529-a89ef5455590)
 
 ## Future Enhancements
 

@@ -59,7 +59,7 @@ python main.py
 
 6. Open your browser and navigate to:
 ```
-http://localhost:5000
+https://f09bea8e-0a06-4fd1-9ea6-40179fae1d96-00-39gjanf2l7utx.janeway.replit.dev/
 ```
 
 ## How It Works
